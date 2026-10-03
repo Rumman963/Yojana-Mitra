@@ -45,6 +45,45 @@ async function main() {
     },
   });
 
+    // Test scheme 1: scholarship with age, income and category rules
+  await prisma.scheme.upsert({
+    where: { slug: "test-scholarship" },
+    update: {},
+    create: {
+      slug: "test-scholarship",
+      level: "CENTRAL",
+      category: "EDUCATION",
+      nameEn: "Test Scholarship",
+      descriptionEn: "Test data only.",
+      benefitEn: "Test data only.",
+      officialUrl: "https://example.com",
+      lastVerifiedAt: new Date(),
+      minAge: 15,
+      maxAge: 30,
+      maxAnnualIncome: 250000,
+      socialCategories: ["SC", "ST", "OBC"],
+      occupations: ["student"],
+    },
+  });
+
+  // Test scheme 2: state pension for older people
+  await prisma.scheme.upsert({
+    where: { slug: "test-up-pension" },
+    update: {},
+    create: {
+      slug: "test-up-pension",
+      level: "STATE",
+      state: "Uttar Pradesh",
+      category: "PENSION",
+      nameEn: "Test UP Pension",
+      descriptionEn: "Test data only.",
+      benefitEn: "Test data only.",
+      officialUrl: "https://example.com",
+      lastVerifiedAt: new Date(),
+      minAge: 60,
+    },
+  });
+
   console.log("Seed complete");
 }
 
