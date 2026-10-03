@@ -9,9 +9,72 @@ datasource db {
   provider = "postgresql"
 }
 
+enum SchemeLevel {
+  CENTRAL
+  STATE
+}
 
-model User { 
-  id    Int     @id @default(autoincrement()) 
-  email String  @unique
-  name  String?
-} 
+enum SchemeCategory {
+  EDUCATION
+  AGRICULTURE
+  HEALTH
+  HOUSING
+  EMPLOYMENT
+  WOMEN_AND_CHILD
+  PENSION
+  OTHER
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum SocialCategory {
+  GENERAL
+  OBC
+  SC
+  ST
+}
+
+model Scheme {
+  id             Int           @id        @default(autoincrement())
+  slug           String        @unique
+                 
+  level          SchemeLevel
+  state          String?
+  category       SchemeCategory
+      
+  nameEn         String
+  nameHi         String?
+  descriptionEn  String
+  descriptionHi  String?
+  benefitEn      String
+  benefitHi      String?
+  howToApplyEn   String?
+  howToApplyHi   String?
+
+  officialUrl    String
+  lastVerifiedAt DateTime
+
+  minAge           Int?
+  maxAge           Int?
+  gender           Gender?
+  maxAnnualIncome  Int?
+  socialCategories SocialCategory[]
+  occupations      String[]
+  documents        Document[]
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+}
+
+
+model Document {
+  id     Int      @id       @default(autoincrement())
+  key    String   @unique
+  nameEn String
+  nameHi String?
+
+  schemes Scheme[]
+}
