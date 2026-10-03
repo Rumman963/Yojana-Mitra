@@ -1,16 +1,8 @@
-import { z } from "zod";
+
+import { profileSchema } from "@/lib/profile-schema";
 import { prisma } from "@/lib/db_client";
 import { isEligible } from "@/lib/matcher";
-import { Gender, SocialCategory } from "@/generated/prisma/enums";
 
-const profileSchema = z.object({
-  age: z.number().int().min(0).max(120).optional(),
-  state: z.string().min(1).optional(),
-  gender: z.enum(Gender).optional(),
-  annualIncome: z.number().min(0).optional(),
-  socialCategory: z.enum(SocialCategory).optional(),
-  occupation: z.string().min(1).optional(),
-});
 
 export async function POST(request: Request) {
   // 1. Read the JSON body
