@@ -1,8 +1,7 @@
-import { GoogleGenAI } from "@google/genai";
 import { profileSchema } from "./profile-schema";
 import type { Profile } from "./matcher";
 
-const INSTRUCTIONS = `You read a short description of a person (English or Hindi) and extract facts about them.
+export const INSTRUCTIONS = `You read a short description of a person (English or Hindi) and extract facts about them.
 Reply with ONLY a JSON object. No explanation, no markdown.
 
 Allowed fields (leave out any field the text does not clearly state):
@@ -15,39 +14,73 @@ Allowed fields (leave out any field the text does not clearly state):
 
 Never guess. If a fact is not in the text, leave the field out.`;
 
-export async function extractProfile(text: string): Promise<Profile | null> {
-  const apiKey = process.env.GEMINI_API_KEY;
-  const model = process.env.GEMINI_MODEL;
+async function askOpenRouter(prompt: string, model: string): Promise<string> {
+  const key = process.env.OPENROUTER_API_KEY;
 
-  if (!apiKey || !model) {
-    throw new Error("GEMINI_API_KEY or GEMINI_MODEL is missing");
+  if (!key) {
+    throw new Error("OPENROUTER_API_KEY is missing");
   }
 
-  const ai = new GoogleGenAI({ apiKey: apiKey });
-
-  // 1. Ask the model
-  const interaction = await ai.interactions.create({
-    model: model,
-    input: INSTRUCTIONS + "\n\nText:\n" + text,
+  
+  const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + key,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: model,
+      messages: [{ role: "user", content: prompt }],
+    }),
   });
 
-  // 2. Clean the reply (models sometimes wrap JSON in code fences)
-  const raw = interaction.output_text ?? "";
+  const data = await response.json();
+
+  if (data.error) {
+    throw new Error("OpenRouter error: " + JSON.stringify(data.error));
+  }
+
+  return data.choices?.[0]?.message?.content ?? "";
+}
+
+function readProfile(raw: string): Profile | null {
   const cleaned = raw.replace(/```json/g, "").replace(/```/g, "").trim();
 
-  // 3. Turn the text into an object
-  let data;
   try {
-    data = JSON.parse(cleaned);
+    const parsed = profileSchema.safeParse(JSON.parse(cleaned));
+    if (parsed.success) {
+      return parsed.data;
+    }
+    return null;
   } catch {
     return null;
   }
+}
 
-  // 4. Check it matches our profile rules
-  const parsed = profileSchema.safeParse(data);
-  if (!parsed.success) {
-    return null;
+export async function extractProfile(text: string): Promise<Profile | null> {
+  const prompt = INSTRUCTIONS + "\n\nText:\n" + text;
+
+  const modelsText = process.env.OPENROUTER_MODELS ?? "";
+  const models = modelsText
+    .split(",")
+    .map((m) => m.trim())
+    .filter((m) => m.length > 0);
+
+  if (models.length === 0) {
+    throw new Error("OPENROUTER_MODELS is missing in .env");
   }
 
-  return parsed.data;
+  let lastError: unknown = null;
+
+  for (const model of models) {
+    try {
+      const raw = await askOpenRouter(prompt, model);
+      return readProfile(raw);
+    } catch (error) {
+      console.error("Model failed:", model, error);
+      lastError = error;
+    }
+  }
+
+  throw lastError;
 }
