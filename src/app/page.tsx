@@ -41,7 +41,7 @@ export default function Home() {
     <main className="mx-auto flex max-w-xl flex-col gap-6 p-4">
       <header>
         <h1 className="text-2xl font-bold">YojanaMitra</h1>
-        <p className="text-gray-600">
+        <p className="text-gray-400">
           Find government schemes you may qualify for in Uttar Pradesh and
           Bihar.
         </p>

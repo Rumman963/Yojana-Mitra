@@ -27,7 +27,7 @@ export default function ResultsList({ matches }: Props) {
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-sm text-gray-600">
+      <p className="text-sm text-gray-400">
         These schemes may fit your details. Rules can be more detailed than
         this form, so always confirm on the official website before applying.
       </p>

@@ -49,11 +49,16 @@ export function isEligible(profile: Profile, scheme: Scheme): boolean {
   }
 
   // Occupation
-  if (scheme.occupations.length > 0 && profile.occupation !== undefined) {
+   if (scheme.occupations.length > 0) {
+    if (profile.occupation === undefined) {
+      return false;
+    }
     if (!scheme.occupations.includes(profile.occupation)) {
       return false;
     }
   }
+  
+
 
   return true;
 }

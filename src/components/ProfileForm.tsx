@@ -122,16 +122,22 @@ export default function ProfileForm({ onSubmit, loading }: Props) {
         </select>
       </label>
 
-      <label>
-        What work do you do? (optional, for example: farmer, student)
-        <input
-          type="text"
+    <label>
+        What work do you do? (optional)
+        <select
           value={occupation}
           onChange={(e) => setOccupation(e.target.value)}
           className={boxStyle}
-        />
+        >
+          <option value="">Prefer not to say</option>
+          <option value="farmer">Farmer</option>
+          <option value="student">Student</option>
+          <option value="other">Something else</option>
+        </select>
       </label>
 
+     
+     
       <button
         type="submit"
         disabled={loading}
