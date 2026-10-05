@@ -1,5 +1,5 @@
 "use client";
-
+import { ThemeToggle } from "@/components/theme-toggle";
 import { useState } from "react";
 import ProfileForm, { type ProfileInput } from "@/components/ProfileForm";
 import ResultsList, { type SchemeResult } from "@/components/ResultsList";
@@ -39,6 +39,7 @@ export default function Home() {
 
   return (
     <main className="mx-auto flex max-w-xl flex-col gap-6 p-4">
+      <ThemeToggle />
       <header>
         <h1 className="text-2xl font-bold">YojanaMitra</h1>
         <p className="text-gray-400">
