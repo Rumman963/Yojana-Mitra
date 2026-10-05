@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Landmark } from "lucide-react";
+import Image from "next/image";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { buttonVariants } from "@/components/ui/button";
 
@@ -8,12 +8,16 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-            <Landmark className="h-5 w-5" />
-          </span>
-          <span className="font-display text-xl font-semibold">
-            YojanaMitra
-          </span>
+                      <Image
+            src="/logo.svg"
+            alt="YojanaMitra logo"
+            width={36}
+            height={36}
+            priority
+            className="h-15"
+            style={{ width: "auto" }}
+          />
+
         </Link>
 
         <div className="flex items-center gap-2">
