@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Inter, Noto_Sans_Devanagari } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+   import { SiteHeader } from "@/components/site-header";
 
 const fraunces = Fraunces({ subsets: ["latin"], variable: "--font-fraunces" });
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -34,6 +35,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+           <SiteHeader />
           {children}
         </ThemeProvider>
       </body>
