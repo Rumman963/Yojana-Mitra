@@ -54,6 +54,7 @@ model Scheme {
   benefitHi      String?
   howToApplyEn   String?
   howToApplyHi   String?
+  otherConditionsEn String[]
 
   officialUrl    String
   lastVerifiedAt DateTime

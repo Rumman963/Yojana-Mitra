@@ -6,30 +6,32 @@ type Entry = {
 };
 
 export const realSchemes: Entry[] = [
-  {
+
+    {
     scheme: {
       slug: "pm-kisan",
       level: "CENTRAL",
       category: "AGRICULTURE",
-      nameEn: "PM-KISAN (Pradhan Mantri Kisan Samman Nidhi)",
-      nameHi: "प्रधानमंत्री किसान सम्मान निधि (पीएम-किसान)",
+      nameEn: "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)",
+      nameHi: "प्रधानमंत्री किसान सम्मान निधि (PM-KISAN)",
       descriptionEn:
-        "Income support for landholding farmer families. Not available to institutional landholders or to higher-income categories such as retired pensioners with a monthly pension of Rs 10,000 or more.",
+        "Income support for farmer families who own cultivable land.",
       benefitEn:
-        "Rs 6,000 per year per family, paid in three installments of Rs 2,000 every four months.",
+        "Rs 6,000 per year in three equal installments of Rs 2,000 every four months, sent directly to your bank account.",
       howToApplyEn:
-        "Apply through the village Patwari or revenue officials, or self-register in the Farmers Corner at pmkisan.gov.in. eKYC is required.",
-      officialUrl: "https://pmkisan.gov.in",
-      lastVerifiedAt: new Date("2026-10-04"),
+        "Register as a new farmer on the PM-KISAN portal, or through your State or UT authorities, who identify and verify beneficiaries. eKYC is mandatory: OTP-based eKYC on the portal, or biometric eKYC at a Common Service Centre (CSC).",
+      officialUrl: "https://www.pmkisan.gov.in/",
+      lastVerifiedAt: new Date("2026-10-05"),
       occupations: ["farmer"],
+      otherConditionsEn: [
+        "Your land must be in your State land records.",
+        "You must complete eKYC.",
+        "Some people are excluded, for example income tax payers, government employees and pensioners with Rs 10,000 or more a month. See the official website for the full list.",
+      ],
     },
+    documentKeys: ["aadhaar", "bank-passbook"],
+  },{
     
-    documentKeys: ["aadhaar", "bank-passbook", "land-records"],
-
-    
-  },
-
-    {
     scheme: {
       slug: "atal-pension-yojana",
       level: "CENTRAL",
@@ -46,6 +48,9 @@ export const realSchemes: Entry[] = [
       lastVerifiedAt: new Date("2026-10-04"),
       minAge: 18,
       maxAge: 40,
+            otherConditionsEn: [
+        "You must not already receive a salary, pension or other social security pension from the Centre or the State.",
+      ],
     },
     documentKeys: [],
   },
@@ -65,6 +70,9 @@ export const realSchemes: Entry[] = [
       officialUrl: "https://sspmis.bihar.gov.in",
       lastVerifiedAt: new Date("2026-10-04"),
       minAge: 60,
+            otherConditionsEn: [
+        "You must not already receive a salary, pension or other social security pension from the Centre or the State.",
+      ],
     },
     documentKeys: [],
   },

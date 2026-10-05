@@ -14,6 +14,7 @@ export type SchemeResult = {
   descriptionEn: string;
   benefitEn: string;
   howToApplyEn: string | null;
+  otherConditionsEn: string[];
   officialUrl: string;
   lastVerifiedAt: string;
   documents: { id: number; nameEn: string; nameHi: string | null }[];
@@ -50,6 +51,7 @@ export default function ResultsList({ matches }: Props) {
       {matches.map((scheme) => {
         const levelText =
           scheme.level === "CENTRAL" ? "Central scheme" : scheme.state + " scheme";
+          const checkItems = scheme.why.toConfirm.concat(scheme.otherConditionsEn);
 
         return (
           <Card key={scheme.id}>
@@ -92,22 +94,22 @@ export default function ResultsList({ matches }: Props) {
                 </div>
               )}
 
-              {scheme.why.toConfirm.length > 0 && (
-                <div>
-                  <p className="mb-2 text-sm font-semibold">
-                    Please check these yourself
-                  </p>
-                  <ul className="flex flex-col gap-1">
-                    {scheme.why.toConfirm.map((item) => (
+                            {checkItems.length > 0 && (
+                <details className="rounded-xl border p-3">
+                  <summary className="cursor-pointer text-sm font-semibold">
+                    Before you apply, check {checkItems.length} thing
+                    {checkItems.length > 1 ? "s" : ""}
+                  </summary>
+                  <ul className="mt-3 flex flex-col gap-2">
+                    {checkItems.map((item) => (
                       <li key={item} className="flex items-start gap-2 text-sm">
                         <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
                         {item}
                       </li>
                     ))}
                   </ul>
-                </div>
+                </details>
               )}
-
               {scheme.documents.length > 0 && (
                 <div>
                   <p className="mb-2 text-sm font-semibold">
