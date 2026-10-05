@@ -2,6 +2,7 @@ import { AlertCircle, CheckCircle2, ExternalLink, FileText } from "lucide-react"
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import Link from "next/link";
 
 export type SchemeResult = {
   id: number;
@@ -139,15 +140,24 @@ export default function ResultsList({ matches }: Props) {
                 <p className="text-xs text-muted-foreground">
                   Last verified: {scheme.lastVerifiedAt.slice(0, 10)}
                 </p>
-                <a
-                  href={scheme.officialUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={buttonVariants({ variant: "outline", size: "sm" })}
-                >
-                  Official website
-                  <ExternalLink className="ml-2 h-4 w-4" />
-                </a>
+                                <div className="flex gap-2">
+                  <Link
+                    href={"/schemes/" + scheme.slug}
+                    className={buttonVariants({ size: "sm" })}
+                  >
+                    View details
+                  </Link>
+                  <a
+                    href={scheme.officialUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={buttonVariants({ variant: "outline", size: "sm" })}
+                  >
+                    Official website
+                    <ExternalLink className="ml-2 h-4 w-4" />
+                  </a>
+                </div>
+                
               </div>
             </CardContent>
           </Card>
