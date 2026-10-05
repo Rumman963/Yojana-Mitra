@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { prisma } from "@/lib/db_client";
-import { isEligible, type Profile } from "@/lib/matcher";
+import { isEligible, explainMatch , type Profile } from "@/lib/matcher";
 import { extractProfile } from "@/lib/llm";
 import { profileSchema } from "@/lib/profile-schema";
 import { isRateLimited } from "@/lib/rate-limit";
@@ -79,12 +79,16 @@ export async function POST(request: Request) {
     include: { documents: true },
   });
 
-  const matches = [];
+  
+     const matches = [];
   for (const scheme of schemes) {
     if (isEligible(profile, scheme)) {
-      matches.push(scheme);
+      const why = explainMatch(profile, scheme);
+      matches.push({ ...scheme, why: why });
     }
   }
+  
+
 
   return Response.json({ profile: profile, count: matches.length, matches: matches });
 }

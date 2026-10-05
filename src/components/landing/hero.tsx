@@ -14,7 +14,7 @@ export function Hero() {
   return (
     <section className="relative overflow-hidden">
       {/* soft glow shapes in the background */}
-      <div className="pointer-events-none absolute -top-24 left-1/2 h-72 w-[40rem] -translate-x-1/2 rounded-full bg-accent/30 blur-3xl" />
+      <div className="pointer-events-none absolute -top-24 left-1/2 h-72 w-160 -translate-x-1/2 rounded-full bg-accent/30 blur-3xl" />
       <div className="pointer-events-none absolute top-40 -left-20 h-64 w-64 rounded-full bg-primary/20 blur-3xl" />
 
       <div className="relative mx-auto max-w-4xl px-4 py-20 text-center sm:py-28">

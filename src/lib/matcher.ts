@@ -11,6 +11,11 @@ export type Profile = {
   occupation?: string;
 };
 
+export type MatchDetails = {
+  reasons: string[];
+  toConfirm: string[];
+};
+
 export function isEligible(profile: Profile, scheme: Scheme): boolean {
   // State schemes only apply to people living in that state
   if (scheme.level === "STATE" && profile.state !== scheme.state) {
@@ -61,4 +66,62 @@ export function isEligible(profile: Profile, scheme: Scheme): boolean {
 
 
   return true;
+}
+
+export function explainMatch(profile: Profile, scheme: Scheme): MatchDetails {
+  const reasons: string[] = [];
+  const toConfirm: string[] = [];
+
+  // State
+  if (scheme.level === "STATE") {
+    reasons.push("You live in " + scheme.state);
+  }
+
+  // Age
+  if (scheme.minAge !== null || scheme.maxAge !== null) {
+    if (profile.age === undefined) {
+      toConfirm.push("Your age");
+    } else if (scheme.minAge !== null && scheme.maxAge !== null) {
+      reasons.push("Your age fits the " + scheme.minAge + " to " + scheme.maxAge + " years range");
+    } else if (scheme.minAge !== null) {
+      reasons.push("You are " + scheme.minAge + " or older");
+    } else {
+      reasons.push("You are " + scheme.maxAge + " or younger");
+    }
+  }
+
+  // Gender
+  if (scheme.gender !== null) {
+    if (profile.gender === undefined) {
+      toConfirm.push("Your gender");
+    } else {
+      reasons.push("This scheme is open to your gender");
+    }
+  }
+
+  // Income
+  if (scheme.maxAnnualIncome !== null) {
+    const limit = scheme.maxAnnualIncome.toLocaleString("en-IN");
+    if (profile.annualIncome === undefined) {
+      toConfirm.push("Your yearly family income (limit Rs " + limit + ")");
+    } else {
+      reasons.push("Your income is within the Rs " + limit + " limit");
+    }
+  }
+
+  // Social category
+  if (scheme.socialCategories.length > 0) {
+    if (profile.socialCategory === undefined) {
+      toConfirm.push("Your category");
+    } else {
+      reasons.push("Your category (" + profile.socialCategory + ") is covered");
+    }
+  }
+
+  // Work
+  if (scheme.occupations.length > 0 && profile.occupation !== undefined) {
+    reasons.push("Your work (" + profile.occupation + ") matches");
+  }
+
+  return { reasons: reasons, toConfirm: toConfirm };
 }

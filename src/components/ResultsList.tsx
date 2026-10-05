@@ -1,6 +1,14 @@
+import { AlertCircle, CheckCircle2, ExternalLink, FileText } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 export type SchemeResult = {
   id: number;
   slug: string;
+  level: string;
+  state: string | null;
+  category: string;
   nameEn: string;
   nameHi: string | null;
   descriptionEn: string;
@@ -9,6 +17,7 @@ export type SchemeResult = {
   officialUrl: string;
   lastVerifiedAt: string;
   documents: { id: number; nameEn: string; nameHi: string | null }[];
+  why: { reasons: string[]; toConfirm: string[] };
 };
 
 type Props = {
@@ -18,63 +27,130 @@ type Props = {
 export default function ResultsList({ matches }: Props) {
   if (matches.length === 0) {
     return (
-      <p className="rounded border border-gray-300 p-4">
-        No schemes found for these details yet. We are adding more schemes
-        regularly.
-      </p>
+      <div className="rounded-2xl border bg-card p-8 text-center">
+        <h2 className="font-display text-xl font-semibold">
+          No schemes found yet
+        </h2>
+        <p className="mt-2 text-muted-foreground">
+          We could not find a match for these details. We are adding more
+          verified schemes regularly, so please check again soon.
+        </p>
+      </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <p className="text-sm text-gray-400">
-        These schemes may fit your details. Rules can be more detailed than
-        this form, so always confirm on the official website before applying.
+    <div className="flex flex-col gap-6">
+      <p className="text-sm text-muted-foreground">
+        We found {matches.length} scheme{matches.length > 1 ? "s" : ""} that
+        may fit you. Rules can be more detailed than our questions, so always
+        confirm on the official website before applying.
       </p>
 
-      {matches.map((scheme) => (
-        <div key={scheme.id} className="rounded border border-gray-300 p-4">
-          <h2 className="text-lg font-bold">{scheme.nameEn}</h2>
+      {matches.map((scheme) => {
+        const levelText =
+          scheme.level === "CENTRAL" ? "Central scheme" : scheme.state + " scheme";
 
-          {scheme.nameHi && <p className="text-gray-600">{scheme.nameHi}</p>}
+        return (
+          <Card key={scheme.id}>
+            <CardHeader>
+              <div className="flex flex-wrap gap-2">
+                <Badge>{levelText}</Badge>
+                <Badge variant="secondary" className="capitalize">
+                  {scheme.category.replaceAll("_", " ").toLowerCase()}
+                </Badge>
+              </div>
+              <h2 className="mt-2 font-display text-2xl font-semibold">
+                {scheme.nameEn}
+              </h2>
+              {scheme.nameHi && (
+                <p className="text-muted-foreground">{scheme.nameHi}</p>
+              )}
+            </CardHeader>
 
-          <p className="mt-2">{scheme.descriptionEn}</p>
+            <CardContent className="flex flex-col gap-5">
+              <p>{scheme.descriptionEn}</p>
 
-          <p className="mt-2">
-            <strong>Benefit:</strong> {scheme.benefitEn}
-          </p>
+              <div className="rounded-xl bg-accent/20 p-4">
+                <p className="text-sm font-medium text-muted-foreground">
+                  What you get
+                </p>
+                <p className="mt-1 font-medium">{scheme.benefitEn}</p>
+              </div>
 
-          {scheme.howToApplyEn && (
-            <p className="mt-2">
-              <strong>How to apply:</strong> {scheme.howToApplyEn}
-            </p>
-          )}
+              {scheme.why.reasons.length > 0 && (
+                <div>
+                  <p className="mb-2 text-sm font-semibold">Why this matched</p>
+                  <ul className="flex flex-col gap-1">
+                    {scheme.why.reasons.map((reason) => (
+                      <li key={reason} className="flex items-start gap-2 text-sm">
+                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                        {reason}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
-          {scheme.documents.length > 0 && (
-            <div className="mt-2">
-              <strong>Documents:</strong>
-              <ul className="list-disc pl-5">
-                {scheme.documents.map((doc) => (
-                  <li key={doc.id}>{doc.nameEn}</li>
-                ))}
-              </ul>
-            </div>
-          )}
+              {scheme.why.toConfirm.length > 0 && (
+                <div>
+                  <p className="mb-2 text-sm font-semibold">
+                    Please check these yourself
+                  </p>
+                  <ul className="flex flex-col gap-1">
+                    {scheme.why.toConfirm.map((item) => (
+                      <li key={item} className="flex items-start gap-2 text-sm">
+                        <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
-          <a
-            href={scheme.officialUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-3 inline-block text-green-700 underline"
-          >
-            Official website
-          </a>
+              {scheme.documents.length > 0 && (
+                <div>
+                  <p className="mb-2 text-sm font-semibold">
+                    Documents to keep ready
+                  </p>
+                  <ul className="flex flex-col gap-1">
+                    {scheme.documents.map((doc) => (
+                      <li key={doc.id} className="flex items-start gap-2 text-sm">
+                        <FileText className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+                        {doc.nameEn}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
-          <p className="mt-2 text-xs text-gray-500">
-            Last verified: {scheme.lastVerifiedAt.slice(0, 10)}
-          </p>
-        </div>
-      ))}
+              {scheme.howToApplyEn && (
+                <div>
+                  <p className="mb-1 text-sm font-semibold">How to apply</p>
+                  <p className="text-sm text-muted-foreground">
+                    {scheme.howToApplyEn}
+                  </p>
+                </div>
+              )}
+
+              <div className="flex flex-wrap items-center justify-between gap-3 border-t pt-4">
+                <p className="text-xs text-muted-foreground">
+                  Last verified: {scheme.lastVerifiedAt.slice(0, 10)}
+                </p>
+                <a
+                  href={scheme.officialUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={buttonVariants({ variant: "outline", size: "sm" })}
+                >
+                  Official website
+                  <ExternalLink className="ml-2 h-4 w-4" />
+                </a>
+              </div>
+            </CardContent>
+          </Card>
+        );
+      })}
     </div>
   );
 }
