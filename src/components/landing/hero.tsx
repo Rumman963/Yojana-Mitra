@@ -25,7 +25,7 @@ export function Hero() {
         >
           <span className="inline-flex items-center gap-2 rounded-full border bg-card px-3 py-1 text-sm text-muted-foreground">
             <MapPin className="h-4 w-4 text-primary" />
-            Uttar Pradesh and Bihar
+            26 States Supported
           </span>
 
           <h1 className="mt-6 font-display text-4xl font-semibold leading-tight tracking-tight sm:text-6xl">
