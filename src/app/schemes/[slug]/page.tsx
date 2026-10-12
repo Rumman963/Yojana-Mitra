@@ -37,9 +37,10 @@ export default async function SchemePage({ params }: Props) {
 
   if (!scheme) {
     notFound();
+    
   }
- const stateName = scheme.jurisdiction ? scheme.jurisdiction.nameEn : null;
 
+ const stateName = scheme.jurisdiction ? scheme.jurisdiction.nameEn : null;
   // Build a short "who can apply" list from the structured rules
   const rules: string[] = [];
  
