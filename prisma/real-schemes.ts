@@ -2,14 +2,16 @@ import type { Prisma } from "../src/generated/prisma/client";
 
 type Entry = {
   scheme: Prisma.SchemeCreateInput;
+  stateLgdCode?: number;
   documentKeys: string[];
+  sources: { url: string; supports: string; accessedAt: string }[];
 };
 
 export const realSchemes: Entry[] = [
-
-    {
+  {
     scheme: {
       slug: "pm-kisan",
+      status: "VERIFIED",
       level: "CENTRAL",
       category: "AGRICULTURE",
       nameEn: "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)",
@@ -30,10 +32,23 @@ export const realSchemes: Entry[] = [
       ],
     },
     documentKeys: ["aadhaar", "bank-passbook"],
-  },{
-    
+    sources: [
+      {
+        url: "https://www.pmkisan.gov.in/",
+        supports: "Official PM-KISAN portal: scheme details, registration, eKYC, exclusions",
+        accessedAt: "2026-10-05",
+      },
+      {
+        url: "https://www.agriwelfare.gov.in/en/FarmersWelDiv",
+        supports: "Department of Agriculture and Farmers Welfare: scheme and benefit amount",
+        accessedAt: "2026-10-05",
+      },
+    ],
+  },
+  {
     scheme: {
       slug: "atal-pension-yojana",
+      status: "VERIFIED",
       level: "CENTRAL",
       category: "PENSION",
       nameEn: "Atal Pension Yojana (APY)",
@@ -48,15 +63,23 @@ export const realSchemes: Entry[] = [
       lastVerifiedAt: new Date("2026-10-04"),
       minAge: 18,
       maxAge: 40,
-            otherConditionsEn: [
+      otherConditionsEn: [
         "You must not be, or have been, an income-tax payer.",
       ],
     },
     documentKeys: [],
+    sources: [
+      {
+        url: "https://www.pfrda.org.in",
+        supports: "PFRDA (the pension regulator): APY Subscriber Information Brochure. Add the exact brochure link you checked.",
+        accessedAt: "2026-10-04",
+      },
+    ],
   },
   {
     scheme: {
       slug: "bihar-vridhjan-pension",
+      status: "VERIFIED",
       level: "STATE",
       state: "Bihar",
       category: "PENSION",
@@ -70,10 +93,18 @@ export const realSchemes: Entry[] = [
       officialUrl: "https://sspmis.bihar.gov.in",
       lastVerifiedAt: new Date("2026-10-04"),
       minAge: 60,
-            otherConditionsEn: [
+      otherConditionsEn: [
         "You must not already receive a salary, pension or other social security pension from the Centre or the State.",
       ],
     },
+    stateLgdCode: 10,
     documentKeys: [],
+    sources: [
+      {
+        url: "https://betastate.bihar.gov.in/pension",
+        supports: "Government of Bihar pension page: age 60+, all income groups, exclusions, Rs 1,100 per month. This is a beta address, so replace it once you confirm the main one.",
+        accessedAt: "2026-10-04",
+      },
+    ],
   },
 ];

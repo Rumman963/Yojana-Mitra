@@ -14,6 +14,12 @@ enum SchemeLevel {
   STATE
 }
 
+enum SchemeStatus {
+  DRAFT
+  VERIFIED
+  RETIRED
+}
+
 enum JurisdictionType {
   STATE
   UNION_TERRITORY
@@ -71,6 +77,10 @@ model Scheme {
   socialCategories SocialCategory[]
   occupations      String[]
   documents        Document[]
+  status           SchemeStatus   @default(DRAFT)
+  jurisdictionId   Int?
+  jurisdiction     Jurisdiction?  @relation(fields: [jurisdictionId], references: [id])
+  sources          SchemeSource[]
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
 }
@@ -84,6 +94,7 @@ model Jurisdiction {
   isActive     Boolean          @default(true)
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
+  schemes      Scheme[]
 }
 
 
@@ -94,4 +105,13 @@ model Document {
   nameHi String?
 
   schemes Scheme[]
+}
+
+model SchemeSource {
+  id         Int      @id @default(autoincrement())
+  schemeId   Int
+  scheme     Scheme   @relation(fields: [schemeId], references: [id], onDelete: Cascade)
+  url        String
+  supports   String
+  accessedAt DateTime
 }
