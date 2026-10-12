@@ -1,0 +1,138 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="236 21 328 328" fill="none">
+  <title>Yojana Mitra — Your trusted companion for government schemes</title>
+  <desc>An independent civic technology logo representing people, community, and support.</desc>
+
+  <defs>
+    <style>
+      .navy { fill: #123B70; }
+      .orange { fill: #FF8C00; }
+      .green { fill: #138808; }
+      .brand {
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+      .hindi {
+        font-family: "Noto Sans Devanagari", "Mangal", sans-serif;
+      }
+      .tagline {
+        font-family: Arial, Helvetica, sans-serif;
+      }
+    </style>
+  </defs>
+
+  <!-- Emblem container -->
+  <rect x="240" y="25" width="320" height="320"
+        rx="48" fill="#FFFFFF" stroke="#D6DCE4" stroke-width="3"/>
+
+  <!-- Outer protective arcs -->
+  <path d="M306 259
+           C267 224 267 158 302 113
+           C323 86 351 73 381 70"
+        stroke="#FF8C00" stroke-width="10"
+        stroke-linecap="round"/>
+  <path d="M419 70
+           C449 73 477 86 498 113
+           C533 158 533 224 494 259"
+        stroke="#138808" stroke-width="10"
+        stroke-linecap="round"/>
+
+  <!-- Abstract connected-community network -->
+  <g stroke="#123B70" stroke-width="4" stroke-linecap="round" opacity="0.95">
+    <path d="M400 76 L374 91 L360 116 L377 137 L400 147
+             L423 137 L440 116 L426 91 Z"/>
+    <path d="M400 76 L400 111 L374 91 L383 119
+             L360 116 L383 119 L377 137 L400 111
+             L423 137 L417 119 L440 116 L417 119
+             L426 91 L400 111"/>
+  </g>
+  <g class="navy">
+    <circle cx="400" cy="76" r="8"/>
+    <circle cx="374" cy="91" r="7"/>
+    <circle cx="426" cy="91" r="7"/>
+    <circle cx="360" cy="116" r="7"/>
+    <circle cx="440" cy="116" r="7"/>
+    <circle cx="383" cy="119" r="7"/>
+    <circle cx="417" cy="119" r="7"/>
+    <circle cx="377" cy="137" r="7"/>
+    <circle cx="423" cy="137" r="7"/>
+    <circle cx="400" cy="111" r="7"/>
+    <circle cx="400" cy="147" r="7"/>
+  </g>
+
+  <!-- Human figure heads -->
+  <circle cx="331" cy="157" r="14" class="orange"/>
+  <circle cx="469" cy="157" r="14" class="green"/>
+
+  <!-- Left abstract person -->
+  <path d="M330 181
+           C300 180 285 204 292 230
+           C299 255 322 273 344 287
+           L369 268
+           C348 253 330 237 325 218
+           C322 205 329 199 341 202
+           C357 206 373 222 388 233
+           C378 209 355 186 330 181 Z"
+        class="orange"/>
+
+  <!-- Right abstract person -->
+  <path d="M470 181
+           C500 180 515 204 508 230
+           C501 255 478 273 456 287
+           L431 268
+           C452 253 470 237 475 218
+           C478 205 471 199 459 202
+           C443 206 427 222 412 233
+           C422 209 445 186 470 181 Z"
+        class="green"/>
+
+  <!-- Three people representing citizens -->
+  <g class="navy">
+    <circle cx="369" cy="264" r="11"/>
+    <circle cx="400" cy="257" r="12"/>
+    <circle cx="431" cy="264" r="11"/>
+    <path d="M351 304 V286 C351 275 359 270 369 270
+             C379 270 386 276 386 286 V304 Z"/>
+    <path d="M381 304 V282 C381 269 389 264 400 264
+             C411 264 419 270 419 282 V304 Z"/>
+    <path d="M414 304 V286 C414 276 421 270 431 270
+             C441 270 449 275 449 286 V304 Z"/>
+  </g>
+
+  <!-- Supporting hands -->
+  <path d="M400 323
+           C383 301 359 296 340 287
+           C320 278 300 262 285 247
+           C278 240 269 244 272 254
+           C282 273 302 292 321 303
+           C296 295 276 278 260 263
+           C252 256 245 262 251 272
+           C267 300 300 323 335 330
+           L382 330 Z"
+        class="navy"/>
+  <path d="M400 323
+           C417 301 441 296 460 287
+           C480 278 500 262 515 247
+           C522 240 531 244 528 254
+           C518 273 498 292 479 303
+           C504 295 524 278 540 263
+           C548 256 555 262 549 272
+           C533 300 500 323 465 330
+           L418 330 Z"
+        class="navy"/>
+
+  <!-- Brand name -->
+  <text x="400" y="445" text-anchor="middle"
+        class="brand navy" font-size="54">YOJANA MITRA</text>
+
+  <!-- Hindi tagline -->
+  <text x="400" y="505" text-anchor="middle"
+        class="hindi navy" font-size="37">आपकी योजनाओं का साथी</text>
+
+  <!-- English tagline -->
+  <text x="400" y="548" text-anchor="middle"
+        class="tagline" fill="#5C7190" font-size="22">
+    Your trusted companion for government schemes
+  </text>
+</svg>
