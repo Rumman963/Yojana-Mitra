@@ -11,9 +11,9 @@ type Props = {
 };
 
 async function getScheme(slug: string) {
-  return prisma.scheme.findUnique({
-    where: { slug: slug },
-    include: { documents: true },
+  return prisma.scheme.findFirst({
+    where: { slug: slug, status: "VERIFIED" },
+    include: { documents: true, jurisdiction: true, sources: true },
   });
 }
 
@@ -38,12 +38,13 @@ export default async function SchemePage({ params }: Props) {
   if (!scheme) {
     notFound();
   }
+ const stateName = scheme.jurisdiction ? scheme.jurisdiction.nameEn : null;
 
   // Build a short "who can apply" list from the structured rules
   const rules: string[] = [];
-
-  if (scheme.level === "STATE") {
-    rules.push("Residents of " + scheme.state);
+ 
+  if (scheme.level === "STATE" && stateName !== null) {
+    rules.push("Residents of " + stateName);
   }
   if (scheme.minAge !== null && scheme.maxAge !== null) {
     rules.push("Age " + scheme.minAge + " to " + scheme.maxAge);
@@ -68,8 +69,9 @@ export default async function SchemePage({ params }: Props) {
     rules.push("Work: " + scheme.occupations.join(", "));
   }
 
-  const levelText =
-    scheme.level === "CENTRAL" ? "Central scheme" : scheme.state + " scheme";
+   const levelText =
+    scheme.level === "CENTRAL" ? "Central scheme" : (stateName ?? "State") + " scheme";
+ 
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
@@ -149,6 +151,31 @@ export default async function SchemePage({ params }: Props) {
         <section className="mt-8">
           <h2 className="font-display text-xl font-semibold">How to apply</h2>
           <p className="mt-3 text-muted-foreground">{scheme.howToApplyEn}</p>
+        </section>
+      )}
+            {scheme.sources.length > 0 && (
+        <section className="mt-8">
+          <h2 className="font-display text-xl font-semibold">
+            Sources we checked
+          </h2>
+          <ul className="mt-3 flex flex-col gap-3 text-sm">
+            {scheme.sources.map((source) => (
+              <li key={source.id}>
+                <a
+                  href={source.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="break-all text-primary underline"
+                >
+                  {source.url}
+                </a>
+                <p className="text-muted-foreground">
+                  {source.supports} (checked{" "}
+                  {source.accessedAt.toISOString().slice(0, 10)})
+                </p>
+              </li>
+            ))}
+          </ul>
         </section>
       )}
 

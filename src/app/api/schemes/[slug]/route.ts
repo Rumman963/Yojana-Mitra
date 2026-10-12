@@ -6,10 +6,11 @@ export async function GET(
 ) {
   const { slug } = await params;
 
-  const scheme = await prisma.scheme.findUnique({
-    where: { slug: slug },
-    include: { documents: true },
+    const scheme = await prisma.scheme.findFirst({
+    where: { slug: slug, status: "VERIFIED" },
+    include: { documents: true, jurisdiction: true, sources: true },
   });
+
 
   if (!scheme) {
     return Response.json({ error: "Scheme not found" }, { status: 404 });

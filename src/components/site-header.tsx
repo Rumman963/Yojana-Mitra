@@ -18,11 +18,9 @@ export function SiteHeader() {
       width: "50px",
       height: "50px",
       objectFit: "contain",
-    }}
-       
-            />
+    }} />
 
-            <div className="flex flex-col justify-center gap-0.5">
+    <div className="flex flex-col justify-center gap-0.5">
     <span className="text-xl font-bold leading-tight tracking-tight text-[#123B70]">
       Yojana Mitra
     </span>

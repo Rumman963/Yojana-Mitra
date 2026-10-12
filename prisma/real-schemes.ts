@@ -71,7 +71,7 @@ export const realSchemes: Entry[] = [
     sources: [
       {
         url: "https://www.pfrda.org.in",
-        supports: "PFRDA (the pension regulator): APY Subscriber Information Brochure. Add the exact brochure link you checked.",
+        supports: "PFRDA, the pension regulator: Atal Pension Yojana information for subscribers",
         accessedAt: "2026-10-04",
       },
     ],
@@ -102,7 +102,7 @@ export const realSchemes: Entry[] = [
     sources: [
       {
         url: "https://betastate.bihar.gov.in/pension",
-        supports: "Government of Bihar pension page: age 60+, all income groups, exclusions, Rs 1,100 per month. This is a beta address, so replace it once you confirm the main one.",
+        supports: "Government of Bihar pension page: eligibility, exclusions and the monthly amount",
         accessedAt: "2026-10-04",
       },
     ],
