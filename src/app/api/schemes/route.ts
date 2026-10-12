@@ -25,26 +25,19 @@ export async function GET(request: Request){
 
   const { state, category } = parsed.data;
 
-  const where: Prisma.SchemeWhereInput = {};
+  const where: Prisma.SchemeWhereInput = { status: "VERIFIED" };
 
   if (category){
     where.category = category;
   }
 
-  if (state){
-    where.OR = [
-        {
-        state:state
-    },
-    {
-        level: "CENTRAL"
-    }
-]
+    if (state) {
+    where.OR = [{ jurisdiction: { nameEn: state } }, { level: "CENTRAL" }];
   }
 
   const schemes = await prisma.scheme.findMany({
     where: where , 
-    include: { documents: true },
+    include: { documents: true, jurisdiction: true },
     orderBy: { nameEn: "asc" },
   });
 

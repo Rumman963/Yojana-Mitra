@@ -75,10 +75,10 @@ export async function POST(request: Request) {
   }
 
   // 5. Load schemes and keep the eligible ones
-  const schemes = await prisma.scheme.findMany({
-    include: { documents: true },
+    const schemes = await prisma.scheme.findMany({
+    where: { status: "VERIFIED" },
+    include: { documents: true, jurisdiction: true },
   });
-
   
      const matches = [];
   for (const scheme of schemes) {

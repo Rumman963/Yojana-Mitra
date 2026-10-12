@@ -1,5 +1,8 @@
-import type { Scheme } from "@/generated/prisma/client";
+
+import type { Scheme, Jurisdiction } from "@/generated/prisma/client";
 import type { Gender, SocialCategory } from "@/generated/prisma/enums";
+
+export type SchemeWithState = Scheme & { jurisdiction: Jurisdiction | null };
 
 // What we know about the person
 export type Profile = {
@@ -16,10 +19,16 @@ export type MatchDetails = {
   toConfirm: string[];
 };
 
-export function isEligible(profile: Profile, scheme: Scheme): boolean {
+export function isEligible(profile: Profile, scheme: SchemeWithState): boolean {
   // State schemes only apply to people living in that state
-  if (scheme.level === "STATE" && profile.state !== scheme.state) {
-    return false;
+    // State schemes only apply to people living in that state
+  if (scheme.level === "STATE") {
+    if (scheme.jurisdiction === null) {
+      return false;
+    }
+    if (profile.state !== scheme.jurisdiction.nameEn) {
+      return false;
+    }
   }
 
   // Age
@@ -68,13 +77,13 @@ export function isEligible(profile: Profile, scheme: Scheme): boolean {
   return true;
 }
 
-export function explainMatch(profile: Profile, scheme: Scheme): MatchDetails {
+export function explainMatch(profile: Profile, scheme:SchemeWithState): MatchDetails {
   const reasons: string[] = [];
   const toConfirm: string[] = [];
 
   // State
-  if (scheme.level === "STATE") {
-    reasons.push("You live in " + scheme.state);
+  if (scheme.level === "STATE" && scheme.jurisdiction !== null) {
+    reasons.push("You live in " + scheme.jurisdiction.nameEn);
   }
 
   // Age
