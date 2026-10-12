@@ -1,6 +1,16 @@
 import { prisma } from "../src/lib/db_client";
+import { jurisdictions } from "./jurisdictions";
 
 async function main() {
+  // 1. States and Union Territories
+  for (const jurisdiction of jurisdictions) {
+    await prisma.jurisdiction.upsert({
+      where: { code: jurisdiction.code },
+      update: jurisdiction,
+      create: jurisdiction,
+    });
+  }
+
   // 1. Documents
   const documents = [
     { key: "aadhaar", nameEn: "Aadhaar card", nameHi: "आधार कार्ड" },

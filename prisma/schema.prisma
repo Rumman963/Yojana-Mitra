@@ -14,6 +14,11 @@ enum SchemeLevel {
   STATE
 }
 
+enum JurisdictionType {
+  STATE
+  UNION_TERRITORY
+}
+
 enum SchemeCategory {
   EDUCATION
   AGRICULTURE
@@ -68,6 +73,17 @@ model Scheme {
   documents        Document[]
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
+}
+
+model Jurisdiction {
+  id           Int              @id @default(autoincrement())
+  code         String           @unique
+  nameEn       String           @unique
+  nameHi       String?
+  type         JurisdictionType
+  isActive     Boolean          @default(true)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
 }
 
 
