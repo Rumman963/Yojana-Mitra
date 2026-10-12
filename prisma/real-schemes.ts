@@ -49,7 +49,7 @@ export const realSchemes: Entry[] = [
       minAge: 18,
       maxAge: 40,
             otherConditionsEn: [
-        "You must not already receive a salary, pension or other social security pension from the Centre or the State.",
+        "You must not be, or have been, an income-tax payer.",
       ],
     },
     documentKeys: [],

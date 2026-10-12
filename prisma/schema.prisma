@@ -77,7 +77,7 @@ model Scheme {
 
 model Jurisdiction {
   id           Int              @id @default(autoincrement())
-  code         String           @unique
+  lgdCode      Int              @unique
   nameEn       String           @unique
   nameHi       String?
   type         JurisdictionType
