@@ -21,16 +21,24 @@ export function useLang(): Lang {
   return useContext(LangContext);
 }
 
-// Returns a function that turns a key into text in the current language
 export function useT() {
   const lang = useLang();
 
-  function t(key: TextKey): string {
-    return dictionary[lang][key];
+  function t(key: TextKey, values?: Record<string, string | number>): string {
+    let text = dictionary[lang][key];
+
+    if (values) {
+      for (const name of Object.keys(values)) {
+        text = text.split("{" + name + "}").join(String(values[name]));
+      }
+    }
+
+    return text;
   }
 
   return t;
 }
+
 
 export function LanguageToggle() {
   const lang = useLang();

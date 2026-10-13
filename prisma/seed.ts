@@ -1,5 +1,5 @@
 import { prisma } from "../src/lib/db_client";
-import { jurisdictions } from "./jurisdictions";
+import { jurisdictions } from "../src/lib/jurisdictions";
 
 async function main() {
   // 1. States and Union Territories
