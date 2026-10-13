@@ -1,9 +1,12 @@
+"use client";
 import Link from "next/link";
 import Image from "next/image";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { buttonVariants } from "@/components/ui/button";
+import { LanguageToggle, useT } from "@/components/language-provider";
 
 export function SiteHeader() {
+    const t = useT();
   return (
     <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
@@ -36,10 +39,11 @@ export function SiteHeader() {
 
         </Link>
 
-        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
           <Link href="/find" className={buttonVariants({ size: "sm" })}>
-            Find schemes
+            {t("findSchemes")}
           </Link>
+          <LanguageToggle />
           <ThemeToggle />
         </div>
       </div>
