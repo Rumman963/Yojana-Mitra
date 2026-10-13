@@ -6,6 +6,8 @@ import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
+import { useLang, useT } from "@/components/language-provider";
+import { jurisdictions } from "@/lib/jurisdictions";
 
 export type ProfileInput = {
   age?: number;
@@ -17,30 +19,6 @@ export type ProfileInput = {
 };
 
 type Option = { value: string; label: string };
-
-const states: Option[] = [
-  { value: "Uttar Pradesh", label: "Uttar Pradesh" },
-  { value: "Bihar", label: "Bihar" },
-];
-
-const genders: Option[] = [
-  { value: "MALE", label: "Male" },
-  { value: "FEMALE", label: "Female" },
-  { value: "OTHER", label: "Other" },
-];
-
-const categories: Option[] = [
-  { value: "GENERAL", label: "General" },
-  { value: "OBC", label: "OBC" },
-  { value: "SC", label: "SC" },
-  { value: "ST", label: "ST" },
-];
-
-const works: Option[] = [
-  { value: "farmer", label: "Farmer" },
-  { value: "student", label: "Student" },
-  { value: "other", label: "Something else" },
-];
 
 type ChoiceGroupProps = {
   options: Option[];
@@ -79,6 +57,9 @@ type WizardProps = {
 };
 
 export function Wizard({ onSubmit, loading }: WizardProps) {
+  const t = useT();
+  const lang = useLang();
+
   const [step, setStep] = useState(0);
   const [state, setState] = useState("");
   const [age, setAge] = useState("");
@@ -88,6 +69,37 @@ export function Wizard({ onSubmit, loading }: WizardProps) {
   const [income, setIncome] = useState("");
 
   const lastStep = 2;
+
+  // The value sent to the server is always the English name.
+  // Only the label changes with the language.
+  function regionLabel(region: { nameEn: string; nameHi: string }): string {
+    if (lang === "hi") {
+      return region.nameHi;
+    }
+    return region.nameEn;
+  }
+
+  const stateList = jurisdictions.filter((j) => j.type === "STATE");
+  const territoryList = jurisdictions.filter((j) => j.type === "UNION_TERRITORY");
+
+  const genders: Option[] = [
+    { value: "MALE", label: t("genderMale") },
+    { value: "FEMALE", label: t("genderFemale") },
+    { value: "OTHER", label: t("genderOther") },
+  ];
+
+  const categories: Option[] = [
+    { value: "GENERAL", label: t("categoryGeneral") },
+    { value: "OBC", label: t("categoryObc") },
+    { value: "SC", label: t("categorySc") },
+    { value: "ST", label: t("categorySt") },
+  ];
+
+  const works: Option[] = [
+    { value: "farmer", label: t("workFarmer") },
+    { value: "student", label: t("workStudent") },
+    { value: "other", label: t("workOther") },
+  ];
 
   let canContinue = true;
   if (step === 0) {
@@ -119,11 +131,16 @@ export function Wizard({ onSubmit, loading }: WizardProps) {
     onSubmit(profile);
   }
 
+  let buttonText = t("next");
+  if (step === lastStep) {
+    buttonText = loading ? t("searching") : t("submit");
+  }
+
   return (
     <div className="rounded-2xl border bg-card p-6 shadow-sm sm:p-8">
       <div className="mb-6">
         <p className="mb-2 text-sm text-muted-foreground">
-          Step {step + 1} of {lastStep + 1}
+          {t("stepOf", { n: step + 1, total: lastStep + 1 })}
         </p>
         <Progress value={((step + 1) / (lastStep + 1)) * 100} />
       </div>
@@ -140,21 +157,41 @@ export function Wizard({ onSubmit, loading }: WizardProps) {
           {step === 0 && (
             <>
               <h2 className="font-display text-2xl font-semibold">
-                Where do you live, and how old are you?
+                {t("q1Title")}
               </h2>
               <div>
-                <p className="mb-2 text-sm font-medium">State</p>
-                <ChoiceGroup options={states} value={state} onChange={setState} />
+                <p className="mb-2 text-sm font-medium">{t("stateLabel")}</p>
+                <select
+                  value={state}
+                  onChange={(e) => setState(e.target.value)}
+                  className="w-full rounded-lg border bg-card p-3 text-sm"
+                >
+                  <option value="">{t("stateChoose")}</option>
+                  <optgroup label={t("groupStates")}>
+                    {stateList.map((region) => (
+                      <option key={region.lgdCode} value={region.nameEn}>
+                        {regionLabel(region)}
+                      </option>
+                    ))}
+                  </optgroup>
+                  <optgroup label={t("groupUts")}>
+                    {territoryList.map((region) => (
+                      <option key={region.lgdCode} value={region.nameEn}>
+                        {regionLabel(region)}
+                      </option>
+                    ))}
+                  </optgroup>
+                </select>
               </div>
               <div>
-                <p className="mb-2 text-sm font-medium">Age</p>
+                <p className="mb-2 text-sm font-medium">{t("ageLabel")}</p>
                 <Input
                   type="number"
                   min={0}
                   max={120}
                   value={age}
                   onChange={(e) => setAge(e.target.value)}
-                  placeholder="For example, 35"
+                  placeholder={t("agePlaceholder")}
                 />
               </div>
             </>
@@ -163,18 +200,15 @@ export function Wizard({ onSubmit, loading }: WizardProps) {
           {step === 1 && (
             <>
               <h2 className="font-display text-2xl font-semibold">
-                A little about you
+                {t("q2Title")}
               </h2>
-              <p className="-mt-3 text-sm text-muted-foreground">
-                Optional. These help us find more schemes, and you can skip
-                them.
-              </p>
+              <p className="-mt-3 text-sm text-muted-foreground">{t("q2Hint")}</p>
               <div>
-                <p className="mb-2 text-sm font-medium">Gender</p>
+                <p className="mb-2 text-sm font-medium">{t("genderLabel")}</p>
                 <ChoiceGroup options={genders} value={gender} onChange={setGender} />
               </div>
               <div>
-                <p className="mb-2 text-sm font-medium">Category</p>
+                <p className="mb-2 text-sm font-medium">{t("categoryLabel")}</p>
                 <ChoiceGroup options={categories} value={category} onChange={setCategory} />
               </div>
             </>
@@ -183,25 +217,21 @@ export function Wizard({ onSubmit, loading }: WizardProps) {
           {step === 2 && (
             <>
               <h2 className="font-display text-2xl font-semibold">
-                Work and income
+                {t("q3Title")}
               </h2>
-              <p className="-mt-3 text-sm text-muted-foreground">
-                Optional. Many schemes depend on these.
-              </p>
+              <p className="-mt-3 text-sm text-muted-foreground">{t("q3Hint")}</p>
               <div>
-                <p className="mb-2 text-sm font-medium">What work do you do?</p>
+                <p className="mb-2 text-sm font-medium">{t("workLabel")}</p>
                 <ChoiceGroup options={works} value={work} onChange={setWork} />
               </div>
               <div>
-                <p className="mb-2 text-sm font-medium">
-                  Yearly family income in rupees
-                </p>
+                <p className="mb-2 text-sm font-medium">{t("incomeLabel")}</p>
                 <Input
                   type="number"
                   min={0}
                   value={income}
                   onChange={(e) => setIncome(e.target.value)}
-                  placeholder="For example, 150000"
+                  placeholder={t("incomePlaceholder")}
                 />
               </div>
             </>
@@ -213,14 +243,14 @@ export function Wizard({ onSubmit, loading }: WizardProps) {
         {step > 0 ? (
           <Button variant="ghost" onClick={() => setStep(step - 1)}>
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back
+            {t("back")}
           </Button>
         ) : (
           <span />
         )}
 
         <Button onClick={handleNext} disabled={!canContinue || loading}>
-          {step < lastStep ? "Next" : loading ? "Searching..." : "Find my schemes"}
+          {buttonText}
           {step < lastStep && <ArrowRight className="ml-2 h-4 w-4" />}
         </Button>
       </div>

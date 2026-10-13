@@ -4,8 +4,10 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Wizard, type ProfileInput } from "@/components/find/wizard";
 import ResultsList, { type SchemeResult } from "@/components/ResultsList";
+import { useT } from "@/components/language-provider";
 
 export default function FindPage() {
+  const t = useT();
   const [loading, setLoading] = useState(false);
   const [matches, setMatches] = useState<SchemeResult[] | null>(null);
   const [message, setMessage] = useState("");
@@ -24,12 +26,12 @@ export default function FindPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        setMessage(data.error ?? "Something went wrong. Please try again.");
+        setMessage(t("errorGeneric"));
       } else {
         setMatches(data.matches);
       }
     } catch {
-      setMessage("Could not reach the server. Please try again.");
+      setMessage(t("errorNetwork"));
     }
 
     setLoading(false);
@@ -40,7 +42,7 @@ export default function FindPage() {
       {matches === null ? (
         <>
           <h1 className="mb-6 font-display text-3xl font-semibold">
-            Find your schemes
+            {t("findTitle")}
           </h1>
           <Wizard onSubmit={handleSubmit} loading={loading} />
           {message !== "" && <p className="mt-4 text-red-500">{message}</p>}
@@ -49,10 +51,10 @@ export default function FindPage() {
         <>
           <div className="mb-6 flex items-center justify-between">
             <h1 className="font-display text-3xl font-semibold">
-              Your schemes
+              {t("yourSchemes")}
             </h1>
             <Button variant="outline" onClick={() => setMatches(null)}>
-              Change my answers
+              {t("changeAnswers")}
             </Button>
           </div>
           <ResultsList matches={matches} />
