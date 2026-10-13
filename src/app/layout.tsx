@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { Fraunces, Inter, Noto_Sans_Devanagari } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-   import { SiteHeader } from "@/components/site-header";
+import { LanguageProvider } from "@/components/language-provider";
+import { SiteHeader } from "@/components/site-header";
+import { defaultLang, isLang } from "@/lib/translations";
 
 const fraunces = Fraunces({ subsets: ["latin"], variable: "--font-fraunces" });
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -14,17 +17,21 @@ const devanagari = Noto_Sans_Devanagari({
 export const metadata: Metadata = {
   title: "YojanaMitra: find government schemes you qualify for",
   description:
-    "Tell us a little about yourself and discover government schemes you may qualify for in Uttar Pradesh and Bihar.",
+    "Tell us a little about yourself and discover government schemes you may qualify for.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const store = await cookies();
+  const saved = store.get("lang")?.value;
+  const lang = isLang(saved) ? saved : defaultLang;
+
   return (
     <html
-      lang="en"
+      lang={lang}
       suppressHydrationWarning
       className={`${fraunces.variable} ${inter.variable} ${devanagari.variable}`}
     >
@@ -35,8 +42,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-           <SiteHeader />
-          {children}
+          <LanguageProvider lang={lang}>
+            <SiteHeader />
+            {children}
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>
